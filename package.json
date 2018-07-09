@@ -13,9 +13,11 @@
   },
   "homepage": "https://school.thoughtworks.cn",
   "scripts": {
-    "test": "mocha spec/**/*.js --require babel/register --require source-map-support/register"
+    "test": "mocha spec/**/*.js --require babel/register --require source-map-support/register",
+    "test-single": "node node_modules/mocha/bin/mocha spec/practice_1/*.js --require babel/register"
   },
   "dependencies": {
+    "chai": "^4.1.2",
     "lodash": "3.9.3"
   },
   "devDependencies": {
@@ -23,6 +25,8 @@
     "mocha": "^4.0.1",
     "sinon": "^4.0.1",
     "sinon-chai": "^2.14.0",
-    "source-map-support": "^0.3.3"
+    "source-map-support": "^0.3.3",
+    "jasmine": "^2.4.1",
+    "jasmine-console-reporter": "^1.2.6"
   }
 }

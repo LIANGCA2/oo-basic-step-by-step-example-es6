@@ -4,7 +4,7 @@ import sinonChai from "sinon-chai";
 const expect = chai.expect;
 chai.use(sinonChai);
 
-import Person from "../../src/practice_1/person.js";
+import {Person} from "../../src/practice_1/person.js";
 
 describe("Person", () => {
     it("should have field name and age", () => {

@@ -40,7 +40,7 @@ npm test
 ```
 运行特定测试：
 ```
-node_modules/mocha/bin/mocha spec/practice_1/*.js --require babel/register
+node node_modules/mocha/bin/mocha spec/practice_1/*.js --require babel/register
 ```
 
 ## 学习资源

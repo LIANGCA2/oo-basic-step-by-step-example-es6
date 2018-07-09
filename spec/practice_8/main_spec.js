@@ -6,10 +6,10 @@ import sinonChai from "sinon-chai";
 const expect = chai.expect;
 chai.use(sinonChai);
 
-import Person from "../../src/practice_8/person.js";
-import Student from "../../src/practice_8/student.js";
-import Teacher from "../../src/practice_8/teacher.js";
-import Class from "../../src/practice_8/class.js";
+import {Person} from "../../src/practice_8/person.js";
+import {Student} from "../../src/practice_8/student.js";
+import {Teacher} from "../../src/practice_8/teacher.js";
+import {Class} from "../../src/practice_8/class.js";
 
 describe("Person", () => {
     it("should have field name and age", () => {
