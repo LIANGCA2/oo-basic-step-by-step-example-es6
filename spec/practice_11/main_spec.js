@@ -1,15 +1,14 @@
 "use strict";
-import _ from "lodash";
-import chai from "chai";
-import sinon from "sinon";
-import sinonChai from "sinon-chai";
+const chai = require("chai");
+const sinon = require("sinon");
+const sinonChai = require("sinon-chai");
 const expect = chai.expect;
 chai.use(sinonChai);
 
-import Person from "../../src/practice_11/person.js";
-import Student from "../../src/practice_11/student.js";
-import Teacher from "../../src/practice_11/teacher.js";
-import Class from "../../src/practice_11/class.js";
+const {Person} = require("../../src/practice_11/person.js");
+const {Student} = require("../../src/practice_11/student.js");
+const {Teacher} = require("../../src/practice_11/teacher.js");
+const {Class} = require("../../src/practice_11/class.js");
 
 describe("Person", () => {
     it("should have field name and age", () => {
@@ -60,9 +59,11 @@ describe("Person", () => {
 
     describe("Teacher", () => {
         let klasses;
+        let klass;
 
         before(() => {
-            klasses = [new Class(2), new Class(3)];
+            klass = new Class(2);
+            klasses = [klass, new Class(3)];
         });
 
         it("should have field name, age and class number", () => {
@@ -87,20 +88,35 @@ describe("Person", () => {
                 expect(introduce).to.equal("My name is Tom. I am 21 years old. I am a Teacher. I teach No Class.");
             });
         });
+
+        describe("#introduceWith", () => {
+            let studentJerry;
+            before(() => {
+                studentJerry = new Student(1, "Jerry", 8, klass);
+            });
+
+            it("should return I am teaching some guy, given my class is same with this guy's class", () => {
+                const teacher = new Teacher(1, "Tom", 21, klasses);
+                const introduce = teacher.introduceWith(studentJerry);
+                expect(introduce).to.equal("My name is Tom. I am 21 years old. I am a Teacher. I teach Jerry.");
+            });
+
+            it("should return I am teaching some guy, given my class is different with this guy's class", () => {
+                const teacher = new Teacher(1, "Tom", 21, [new Class(10)]);
+                const introduce = teacher.introduceWith(studentJerry);
+                expect(introduce).to.equal("My name is Tom. I am 21 years old. I am a Teacher. I don't teach Jerry.");
+            });
+        });
     });
 });
 
 describe("Class", () => {
-    let sandbox;
-    let spy;
-
-    beforeEach(()=>{
-        sandbox = sinon.sandbox.create();
-        spy = sandbox.stub(console, 'log');
+    before(() => {
+        sinon.spy(console, 'log');
     });
 
-    afterEach(() => {
-      sandbox.restore();
+    after(() => {
+        console.log.restore();
     });
 
     it("should have class number", () => {
@@ -121,7 +137,7 @@ describe("Class", () => {
             klass.assignLeader(student);
 
             expect(klass.leader).to.equal(student);
-         });
+        });
 
         it("should not assign student as Leader, given student is not class member", () => {
             const klass = new Class(2);
@@ -142,7 +158,7 @@ describe("Class", () => {
 
             expect(klass.leader).not.equal(student);
             //expect(console.log.getCall(0).args[0]).to.equal("It is not one of us."); //assert style 2.
-            expect(spy.calledWith("It is not one of us.")).to.be.ok;
+            expect(console.log).to.be.calledWith("It is not one of us.");
         });
 
         it("should notify assign leader listeners", () => {
@@ -153,8 +169,8 @@ describe("Class", () => {
             klass.registerAssignLeaderListener(teacher);
 
             klass.assignLeader(student);
+            expect(console.log).to.be.calledWith("I am Tom. I know Jerry become Leader of Class 2.");
 
-            expect(spy.calledWith("I am Tom. I know Jerry become Leader of Class 2.")).to.be.ok;
         });
     });
 
@@ -182,7 +198,8 @@ describe("Class", () => {
 
             klass.appendMember(student);
 
-            expect(spy.calledWith("I am Tom. I know Jerry has joined Class 2.")).to.be.ok;
+            expect(console.log).to.be.calledWith("I am Tom. I know Jerry has joined Class 2.");
+
         });
     });
 });

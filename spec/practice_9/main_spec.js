@@ -1,15 +1,15 @@
 "use strict";
-import _ from "lodash";
-import chai from "chai";
-import sinon from "sinon";
-import sinonChai from "sinon-chai";
+const chai = require("chai");
+const sinon = require("sinon");
+const sinonChai = require("sinon-chai");
 const expect = chai.expect;
 chai.use(sinonChai);
 
-import Person from "../../src/practice_9/person.js";
-import Student from "../../src/practice_9/student.js";
-import Teacher from "../../src/practice_9/teacher.js";
-import Class from "../../src/practice_9/class.js";
+const {Person} = require("../../src/practice_9/person.js");
+const {Student} = require("../../src/practice_9/student.js");
+const {Teacher} = require("../../src/practice_9/teacher.js");
+const {Class} = require("../../src/practice_9/class.js");
+
 
 describe("Person", () => {
     it("should have field name and age", () => {
@@ -53,7 +53,7 @@ describe("Person", () => {
                 klass.assignLeader(student);
                 const introduce = student.introduce();
 
-                expect(introduce).to.equal("My name is Tom. I am 21 years old. I am a Student. I am Leader of Class 2.");            
+                expect(introduce).to.equal("My name is Tom. I am 21 years old. I am a Student. I am Leader of Class 2.");
             });
         });
     });
@@ -86,6 +86,26 @@ describe("Person", () => {
                 expect(introduce).to.equal("My name is Tom. I am 21 years old. I am a Teacher. I teach No Class.");
             });
         });
+
+        describe("#introduceWith", () => {
+            let studentJerry;
+
+            before(() => {
+                studentJerry = new Student(1, "Jerry", 8, klass);
+            });
+
+            it("should return I am teaching some guy, given my class is same with this guy's class", () => {
+                const teacher = new Teacher(1, "Tom", 21, klass);
+                const introduce = teacher.introduceWith(studentJerry);
+                expect(introduce).to.equal("My name is Tom. I am 21 years old. I am a Teacher. I teach Jerry.");
+            });
+
+            it("should return I am teaching some guy, given my class is different with this guy's class", () => {
+                const teacher = new Teacher(1, "Tom", 21, new Class(10));
+                const introduce = teacher.introduceWith(studentJerry);
+                expect(introduce).to.equal("My name is Tom. I am 21 years old. I am a Teacher. I don't teach Jerry.");
+            });
+        });
     });
 });
 
@@ -101,16 +121,14 @@ describe("Class", () => {
     });
 
     describe("#assignLeader", () => {
-        let sandbox;
-        let spy;
+
 
         before(()=>{
-            sandbox = sinon.sandbox.create();
-            spy = sandbox.stub(console, 'log');
+            sinon.spy(console, 'log');
         });
 
         after(() => {
-          sandbox.restore();
+            console.log.restore();
         });
 
 
@@ -120,7 +138,7 @@ describe("Class", () => {
 
             klass.assignLeader(student);
             expect(klass.leader).to.equal(student);
-         });
+        });
 
         it("should not assign student as Leader, given student is not class member", () => {
             const klass = new Class(2);
@@ -141,7 +159,7 @@ describe("Class", () => {
 
             expect(klass.leader).not.equal(student);
             //expect(console.log.getCall(0).args[0]).to.equal("It is not one of us."); //assert style 2.
-            expect(spy.calledWith("It is not one of us.")).to.be.ok;
+            expect(console.log).to.be.calledWith("It is not one of us.");
         });
     });
 
