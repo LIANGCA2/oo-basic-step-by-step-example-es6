@@ -23,6 +23,12 @@ class Teacher extends Person {
             return super.introduce() + ` I am a Teacher. I don't teach Jerry.`;
         }
     }
+    saySomeoneJoinClass(student,number){
+        console.log(`I am ${this.name}. I know ${student.name} has joined Class ${number}.`);
+    }
+    sayAssignLeader(student,number){
+        console.log(`I am ${this.name}. I know ${student.name} become Leader of Class ${number}.`);
+    }
 }
 module.exports= {Teacher}
 
